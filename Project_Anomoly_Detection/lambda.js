@@ -38,7 +38,7 @@ exports.handler = function(event, context, callback) {
                                 StringValue: 'BkFailures'
                             }
                         },
-                        PhoneNumber: '<<phone_number>>'                 // Your phone number goes here to get an SMS notification
+                        PhoneNumber: '+94770630943'                 // Your phone number goes here to get an SMS notification
                     }).promise()
                         .then(data => {
                             console.log("Successfully sent notification to the operator with response :" + JSON.stringify(data));
