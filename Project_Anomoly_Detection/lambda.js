@@ -6,7 +6,7 @@ const sns = new AWS.SNS();
 exports.handler = function(event, context, callback) {
 
 	sqs.receiveMessage({
-        QueueUrl: '<<queue_url>>',  // URL of your queue
+        QueueUrl: 'https://sqs.us-east-1.amazonaws.com/318300609668/anomalyDetectionQueue',  // URL of your queue
         AttributeNames: ['All'],
         MaxNumberOfMessages: '10',
         VisibilityTimeout: '30',
