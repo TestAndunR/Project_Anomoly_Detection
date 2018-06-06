@@ -21,7 +21,7 @@ exports.handler = function (event, context, callback) {
 				let bookingDateObj = new Date();
 				let startingDateObj = date.parse(messageBody.bookingRequest.startDate, 'YYYY-MM-DD');
 				let endingDateObj = date.parse(messageBody.bookingRequest.endDate, 'YYYY-MM-DD');
-
+				// console.log(bookingDateObj+","+startingDateObj+","+endingDateObj);
 				let failure = messageBody.bookingReqProcessingState === "Failed";       // Check whether it's a booking failure
 				if (failure) {
 					let notificationMsg = "Notifying about booking failure for booking reference :" + messageBody.bookingRef;
