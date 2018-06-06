@@ -21,11 +21,11 @@ exports.handler = function (event, context, callback) {
 				let bookingDateObj = new Date();
 				let startingDateObj = date.parse(messageBody.bookingRequest.startDate, 'YYYY-MM-DD');
 				let endingDateObj = date.parse(messageBody.bookingRequest.endDate, 'YYYY-MM-DD');
-				// console.log(bookingDateObj+","+startingDateObj+","+endingDateObj);
+				console.log("details are:"+bookingDateObj+","+startingDateObj+","+endingDateObj);
 				let failure = messageBody.bookingReqProcessingState === "Failed";       // Check whether it's a booking failure
 				if (failure) {
 					let notificationMsg = "Notifying about booking failure for booking reference :" + messageBody.bookingRef;
-
+					console.log("in the if case")
 					sns.publish({
 						Message: notificationMsg,
 						MessageAttributes: {
@@ -47,13 +47,14 @@ exports.handler = function (event, context, callback) {
 							console.log("Error while sending notification SMS", err);
 						});
 				}
-
+				console.log("outof the if case")
 				let gapForBookingStartDate = date.subtract(startingDateObj, bookingDateObj).toDays();
 				let gapBetweenBookingDates = date.subtract(endingDateObj, startingDateObj).toDays();
-
+				console.log(gapForBookingStartDate,gapBetweenBookingDates);
 				// Check whether is it a booking anomaly. In this example it's detected as an anomaly if booking start date is
 				// 6 months (180 days) away from the current date or booking date range is greater than 20 days
 				if (gapBetweenBookingDates > 20 || gapForBookingStartDate > 180) {
+					console.log("Inside booking if case");
 					let insertTimeStr = date.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
 					ddb.put({
 						TableName: 'BookingInfoAnomalies',
@@ -77,7 +78,7 @@ exports.handler = function (event, context, callback) {
 							console.log("Error while inserting data to DynamoDB due to : ", err);
 						});
 				}
-
+				console.log("Outside booking if case");
 				sqs.deleteMessage({                         // Deleting process message to make sure it's not processed again
 					QueueUrl: 'https://sqs.us-east-1.amazonaws.com/318300609668/anomalyDetectionQueue',  // URL of your queue
 					ReceiptHandle: message.ReceiptHandle
